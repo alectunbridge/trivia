@@ -8,3 +8,4 @@ target/
 .classpath
 /bin/
 *.class
+/src/test/resources/output*.txt
