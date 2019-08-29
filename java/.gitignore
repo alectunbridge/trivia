@@ -1,1 +1,11 @@
 target/
+.idea
+*.iml
+*.ipr
+*.iws
+.settings
+.project
+.classpath
+/bin/
+*.class
+/src/test/resources/output*.txt
