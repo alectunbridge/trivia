@@ -16,7 +16,7 @@ public class Game {
     
     int currentPlayer = 0;
     boolean isGettingOutOfPenaltyBox;
-    
+
     public  Game(){
     	for (int i = 0; i < 50; i++) {
 			popQuestions.addLast("Pop Question " + i);
@@ -28,10 +28,6 @@ public class Game {
 
 	public String createRockQuestion(int index){
 		return "Rock Question " + index;
-	}
-	
-	public boolean isPlayable() {
-		return (howManyPlayers() >= 2);
 	}
 
 	public boolean add(String playerName) {
