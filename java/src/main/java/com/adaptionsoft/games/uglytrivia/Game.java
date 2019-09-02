@@ -92,21 +92,23 @@ public class Game {
 			System.out.println(rockQuestions.removeFirst());		
 	}
 	
-	
 	private String currentCategory() {
-		if (places[currentPlayer] == 0) return POP;
-		if (places[currentPlayer] == 4) return POP;
-		if (places[currentPlayer] == 8) return POP;
-		if (places[currentPlayer] == 1) return SCIENCE;
-		if (places[currentPlayer] == 5) return SCIENCE;
-		if (places[currentPlayer] == 9) return SCIENCE;
-		if (places[currentPlayer] == 2) return SPORTS;
-		if (places[currentPlayer] == 6) return SPORTS;
-		if (places[currentPlayer] == 10) return SPORTS;
-		if (places[currentPlayer] == 3) return ROCK;
-		if (places[currentPlayer] == 7) return ROCK;
-		if (places[currentPlayer] == 11) return ROCK;
-		throw new IllegalArgumentException("We shouldn't get here");
+    	String[] categories = new String[]{
+    			POP,
+				SCIENCE,
+				SPORTS,
+				ROCK,
+				POP,
+				SCIENCE,
+				SPORTS,
+				ROCK,
+				POP,
+				SCIENCE,
+				SPORTS,
+				ROCK
+		};
+
+		return categories[places[currentPlayer]];
 	}
 
 	public boolean wasCorrectlyAnswered() {
