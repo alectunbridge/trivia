@@ -103,7 +103,10 @@ public class Game {
 		if (places[currentPlayer] == 2) return SPORTS;
 		if (places[currentPlayer] == 6) return SPORTS;
 		if (places[currentPlayer] == 10) return SPORTS;
-		return ROCK;
+		if (places[currentPlayer] == 3) return ROCK;
+		if (places[currentPlayer] == 7) return ROCK;
+		if (places[currentPlayer] == 11) return ROCK;
+		throw new IllegalArgumentException("We shouldn't get here");
 	}
 
 	public boolean wasCorrectlyAnswered() {
