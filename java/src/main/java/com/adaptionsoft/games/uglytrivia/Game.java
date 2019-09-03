@@ -3,13 +3,13 @@ package com.adaptionsoft.games.uglytrivia;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-class Category{
+class Category {
     private String name;
-    private LinkedList questions;
+    private LinkedList<String> questions;
 
     public Category(String name) {
         this.name = name;
-        questions = new LinkedList();
+        questions = new LinkedList<>();
         for (int i = 0; i < 50; i++) {
             questions.addLast(name + " Question " + i);
         }
@@ -21,6 +21,7 @@ class Category{
     }
 
     public void askQuestion() {
+        System.out.println("The category is " + name);
         System.out.println(questions.removeFirst());
     }
 }
@@ -37,39 +38,35 @@ public class Game {
     private boolean isGettingOutOfPenaltyBox;
 
     public Game() {
-        Category POP = new Category("Pop");
-        Category ROCK = new Category("Rock");
-        Category SPORTS = new Category("Sports");
-        Category SCIENCE = new Category("Science");
+        Category pop = new Category("Pop");
+        Category rock = new Category("Rock");
+        Category sports = new Category("Sports");
+        Category science = new Category("Science");
         categories = new Category[]{
-                POP,
-                SCIENCE,
-                SPORTS,
-                ROCK,
-                POP,
-                SCIENCE,
-                SPORTS,
-                ROCK,
-                POP,
-                SCIENCE,
-                SPORTS,
-                ROCK
+                pop,
+                science,
+                sports,
+                rock,
+                pop,
+                science,
+                sports,
+                rock,
+                pop,
+                science,
+                sports,
+                rock
         };
     }
 
     public boolean add(String playerName) {
         players.add(playerName);
-        places[howManyPlayers()] = 0;
-        purses[howManyPlayers()] = 0;
-        inPenaltyBox[howManyPlayers()] = false;
+        places[players.size()] = 0;
+        purses[players.size()] = 0;
+        inPenaltyBox[players.size()] = false;
 
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + players.size());
         return true;
-    }
-
-    public int howManyPlayers() {
-        return players.size();
     }
 
     public void roll(int roll) {
@@ -98,17 +95,9 @@ public class Game {
         System.out.println(players.get(currentPlayer)
                 + "'s new location is "
                 + places[currentPlayer]);
-        System.out.println("The category is " + currentCategory());
-        askQuestion();
-    }
 
-    private void askQuestion() {
-            currentCategory().askQuestion();
+        categories[places[currentPlayer]].askQuestion();
 
-    }
-
-    private Category currentCategory() {
-        return categories[places[currentPlayer]];
     }
 
     public boolean wasCorrectlyAnswered() {
@@ -133,11 +122,10 @@ public class Game {
                 + purses[currentPlayer]
                 + " Gold Coins.");
 
-        boolean winner = didPlayerWin();
         currentPlayer++;
         if (currentPlayer == players.size()) currentPlayer = 0;
 
-        return winner;
+        return didPlayerWin();
     }
 
     public boolean wrongAnswer() {
