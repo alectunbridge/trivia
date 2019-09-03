@@ -1,7 +1,35 @@
 package com.adaptionsoft.games.uglytrivia;
 
+import com.sun.media.jfxmedia.events.PlayerEvent;
+import javafx.beans.value.ObservableBooleanValue;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+
+class Player{
+
+    private int place;
+    private String playerName;
+
+    public Player(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public void setPlace(int place) {
+
+        this.place = place;
+    }
+
+    public int getPlace() {
+        return place;
+    }
+
+    @Override
+    public String toString() {
+        return playerName;
+    }
+}
 
 class Category {
     private String name;
@@ -29,13 +57,12 @@ class Category {
 public class Game {
     private final Category[] board;
 
-    private ArrayList players = new ArrayList();
-    private int[] places = new int[6];
     private int[] purses = new int[6];
     private boolean[] inPenaltyBox = new boolean[6];
 
     private int currentPlayer = 0;
     private boolean isGettingOutOfPenaltyBox;
+    private List<Player> players = new ArrayList<>();
 
     public Game() {
         Category pop = new Category("Pop");
@@ -59,7 +86,7 @@ public class Game {
     }
 
     public void addPlayer(String playerName) {
-        players.add(playerName);
+        players.add(new Player(playerName));
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + players.size());
     }
@@ -85,14 +112,26 @@ public class Game {
     }
 
     private void movePlayer(int roll) {
-        places[currentPlayer] = (places[currentPlayer] + roll) % 12;
+        setCurrentPlayerPlace(roll);
 
         System.out.println(players.get(currentPlayer)
                 + "'s new location is "
-                + places[currentPlayer]);
+                + getCurrentPlayerPlace());
 
-        board[places[currentPlayer]].askQuestion();
+        board[getCurrentPlayerPlace()].askQuestion();
 
+    }
+
+    private Player getCurrentPlayer() {
+        return players.get(currentPlayer);
+    }
+
+    private void setCurrentPlayerPlace(int roll) {
+        getCurrentPlayer().setPlace((getCurrentPlayerPlace() + roll) % 12);
+    }
+
+    private int getCurrentPlayerPlace() {
+        return getCurrentPlayer().getPlace();
     }
 
     public boolean wasCorrectlyAnswered() {
