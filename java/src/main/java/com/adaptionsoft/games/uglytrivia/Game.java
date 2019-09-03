@@ -27,7 +27,7 @@ class Category {
 }
 
 public class Game {
-    private final Category[] categories;
+    private final Category[] board;
 
     private ArrayList players = new ArrayList();
     private int[] places = new int[6];
@@ -42,7 +42,7 @@ public class Game {
         Category rock = new Category("Rock");
         Category sports = new Category("Sports");
         Category science = new Category("Science");
-        categories = new Category[]{
+        board = new Category[]{
                 pop,
                 science,
                 sports,
@@ -91,7 +91,7 @@ public class Game {
                 + "'s new location is "
                 + places[currentPlayer]);
 
-        categories[places[currentPlayer]].askQuestion();
+        board[places[currentPlayer]].askQuestion();
 
     }
 
