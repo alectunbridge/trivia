@@ -5,66 +5,59 @@ import java.util.LinkedList;
 
 class Category{
     private String name;
+    private LinkedList questions;
 
     public Category(String name) {
         this.name = name;
+        questions = new LinkedList();
+        for (int i = 0; i < 50; i++) {
+            questions.addLast(name + " Question " + i);
+        }
     }
 
     @Override
     public String toString() {
         return name;
     }
+
+    public void askQuestion() {
+        System.out.println(questions.removeFirst());
+    }
 }
 
 public class Game {
-    public static final Category POP = new Category("Pop");
-    public static final Category SCIENCE = new Category("Science");
-    public static final Category SPORTS = new Category( "Sports");
-    public static final Category ROCK = new Category("Rock");
-    public static final Category[] CATEGORIES = new Category[]{
-            POP,
-            SCIENCE,
-            SPORTS,
-            ROCK,
-            POP,
-            SCIENCE,
-            SPORTS,
-            ROCK,
-            POP,
-            SCIENCE,
-            SPORTS,
-            ROCK
-    };
+    private final Category[] categories;
 
-    ArrayList players = new ArrayList();
-    int[] places = new int[6];
-    int[] purses = new int[6];
-    boolean[] inPenaltyBox = new boolean[6];
+    private ArrayList players = new ArrayList();
+    private int[] places = new int[6];
+    private int[] purses = new int[6];
+    private boolean[] inPenaltyBox = new boolean[6];
 
-    LinkedList popQuestions = new LinkedList();
-    LinkedList scienceQuestions = new LinkedList();
-    LinkedList sportsQuestions = new LinkedList();
-    LinkedList rockQuestions = new LinkedList();
-
-    int currentPlayer = 0;
-    boolean isGettingOutOfPenaltyBox;
+    private int currentPlayer = 0;
+    private boolean isGettingOutOfPenaltyBox;
 
     public Game() {
-        for (int i = 0; i < 50; i++) {
-            popQuestions.addLast("Pop Question " + i);
-            scienceQuestions.addLast(("Science Question " + i));
-            sportsQuestions.addLast(("Sports Question " + i));
-            rockQuestions.addLast(createRockQuestion(i));
-        }
-    }
-
-    public String createRockQuestion(int index) {
-        return "Rock Question " + index;
+        Category POP = new Category("Pop");
+        Category ROCK = new Category("Rock");
+        Category SPORTS = new Category("Sports");
+        Category SCIENCE = new Category("Science");
+        categories = new Category[]{
+                POP,
+                SCIENCE,
+                SPORTS,
+                ROCK,
+                POP,
+                SCIENCE,
+                SPORTS,
+                ROCK,
+                POP,
+                SCIENCE,
+                SPORTS,
+                ROCK
+        };
     }
 
     public boolean add(String playerName) {
-
-
         players.add(playerName);
         places[howManyPlayers()] = 0;
         purses[howManyPlayers()] = 0;
@@ -110,18 +103,12 @@ public class Game {
     }
 
     private void askQuestion() {
-        if (currentCategory() == POP)
-            System.out.println(popQuestions.removeFirst());
-        if (currentCategory() == SCIENCE)
-            System.out.println(scienceQuestions.removeFirst());
-        if (currentCategory() == SPORTS)
-            System.out.println(sportsQuestions.removeFirst());
-        if (currentCategory() == ROCK)
-            System.out.println(rockQuestions.removeFirst());
+            currentCategory().askQuestion();
+
     }
 
     private Category currentCategory() {
-        return CATEGORIES[places[currentPlayer]];
+        return categories[places[currentPlayer]];
     }
 
     public boolean wasCorrectlyAnswered() {
