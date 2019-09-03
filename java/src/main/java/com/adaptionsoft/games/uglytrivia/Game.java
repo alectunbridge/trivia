@@ -122,10 +122,11 @@ public class Game {
                 + purses[currentPlayer]
                 + " Gold Coins.");
 
+        boolean winner = didPlayerWin();
         currentPlayer++;
         if (currentPlayer == players.size()) currentPlayer = 0;
 
-        return didPlayerWin();
+        return winner;
     }
 
     public boolean wrongAnswer() {
