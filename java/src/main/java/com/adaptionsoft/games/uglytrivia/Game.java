@@ -1,8 +1,5 @@
 package com.adaptionsoft.games.uglytrivia;
 
-import com.sun.media.jfxmedia.events.PlayerEvent;
-import javafx.beans.value.ObservableBooleanValue;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,11 +13,6 @@ class Player{
         this.playerName = playerName;
     }
 
-    public void setPlace(int place) {
-
-        this.place = place;
-    }
-
     public int getPlace() {
         return place;
     }
@@ -28,6 +20,14 @@ class Player{
     @Override
     public String toString() {
         return playerName;
+    }
+
+    void movePlayerCounter(int roll) {
+        this.place = (place + roll) % 12;
+
+        System.out.println(playerName
+                + "'s new location is "
+                + place);
     }
 }
 
@@ -100,38 +100,24 @@ public class Game {
                 isGettingOutOfPenaltyBox = true;
 
                 System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-                movePlayer(roll);
+                takeTurn(getCurrentPlayer(), roll);
             } else {
                 System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
             }
         } else {
-            movePlayer(roll);
+            takeTurn(getCurrentPlayer(), roll);
         }
 
     }
 
-    private void movePlayer(int roll) {
-        setCurrentPlayerPlace(roll);
-
-        System.out.println(players.get(currentPlayer)
-                + "'s new location is "
-                + getCurrentPlayerPlace());
-
-        board[getCurrentPlayerPlace()].askQuestion();
-
+    private void takeTurn(Player currentPlayer, int roll) {
+        currentPlayer.movePlayerCounter(roll);
+        board[currentPlayer.getPlace()].askQuestion();
     }
 
     private Player getCurrentPlayer() {
         return players.get(currentPlayer);
-    }
-
-    private void setCurrentPlayerPlace(int roll) {
-        getCurrentPlayer().setPlace((getCurrentPlayerPlace() + roll) % 12);
-    }
-
-    private int getCurrentPlayerPlace() {
-        return getCurrentPlayer().getPlace();
     }
 
     public boolean wasCorrectlyAnswered() {
