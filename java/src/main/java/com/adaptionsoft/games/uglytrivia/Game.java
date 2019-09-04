@@ -8,13 +8,11 @@ class Player{
 
     private int place;
     private String playerName;
+    private Game game;
 
-    public Player(String playerName) {
+    Player(String playerName, Game game) {
         this.playerName = playerName;
-    }
-
-    public int getPlace() {
-        return place;
+        this.game = game;
     }
 
     @Override
@@ -22,12 +20,14 @@ class Player{
         return playerName;
     }
 
-    void movePlayerCounter(int roll) {
+    void takeTurn(int roll) {
         this.place = (place + roll) % 12;
 
         System.out.println(playerName
                 + "'s new location is "
                 + place);
+
+        game.askQuestion(place);
     }
 }
 
@@ -48,7 +48,7 @@ class Category {
         return name;
     }
 
-    public void askQuestion() {
+    public void getQuestion() {
         System.out.println("The category is " + name);
         System.out.println(questions.removeFirst());
     }
@@ -86,7 +86,7 @@ public class Game {
     }
 
     public void addPlayer(String playerName) {
-        players.add(new Player(playerName));
+        players.add(new Player(playerName, this));
         System.out.println(playerName + " was added");
         System.out.println("They are player number " + players.size());
     }
@@ -100,20 +100,19 @@ public class Game {
                 isGettingOutOfPenaltyBox = true;
 
                 System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-                takeTurn(getCurrentPlayer(), roll);
+                getCurrentPlayer().takeTurn(roll);
             } else {
                 System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
                 isGettingOutOfPenaltyBox = false;
             }
         } else {
-            takeTurn(getCurrentPlayer(), roll);
+            getCurrentPlayer().takeTurn(roll);
         }
 
     }
 
-    private void takeTurn(Player currentPlayer, int roll) {
-        currentPlayer.movePlayerCounter(roll);
-        board[currentPlayer.getPlace()].askQuestion();
+    void askQuestion(int place) {
+        board[place].getQuestion();
     }
 
     private Player getCurrentPlayer() {
