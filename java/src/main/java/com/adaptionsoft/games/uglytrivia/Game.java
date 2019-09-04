@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-class Player{
+class Player {
 
+    static boolean isGettingOutOfPenaltyBox = false;
     private int place;
     private String playerName;
     private Game game;
+    private boolean inPenaltyBox;
 
     Player(String playerName, Game game) {
         this.playerName = playerName;
@@ -21,13 +23,21 @@ class Player{
     }
 
     void takeTurn(int roll) {
-        this.place = (place + roll) % 12;
+        place = (place + roll) % Game.BOARD_SIZE;
 
         System.out.println(playerName
                 + "'s new location is "
                 + place);
 
         game.askQuestion(place);
+    }
+
+    public void setInPenaltyBox(boolean inPenaltyBox) {
+        this.inPenaltyBox = inPenaltyBox;
+    }
+
+    public boolean isInPenaltyBox() {
+        return inPenaltyBox;
     }
 }
 
@@ -55,13 +65,11 @@ class Category {
 }
 
 public class Game {
+    public static final int BOARD_SIZE = 12;
     private final Category[] board;
 
     private int[] purses = new int[6];
-    private boolean[] inPenaltyBox = new boolean[6];
-
     private int currentPlayer = 0;
-    private boolean isGettingOutOfPenaltyBox;
     private List<Player> players = new ArrayList<>();
 
     public Game() {
@@ -92,23 +100,27 @@ public class Game {
     }
 
     public void roll(int roll) {
-        System.out.println(players.get(currentPlayer) + " is the current player");
+        System.out.println(getCurrentPlayer() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if (inPenaltyBox[currentPlayer]) {
-            if (roll % 2 != 0) {
-                isGettingOutOfPenaltyBox = true;
-
-                System.out.println(players.get(currentPlayer) + " is getting out of the penalty box");
-                getCurrentPlayer().takeTurn(roll);
-            } else {
-                System.out.println(players.get(currentPlayer) + " is not getting out of the penalty box");
-                isGettingOutOfPenaltyBox = false;
-            }
-        } else {
+        if(tryToGetOutOfPenaltyBox(roll)) {
             getCurrentPlayer().takeTurn(roll);
         }
+    }
 
+    private boolean tryToGetOutOfPenaltyBox(int roll) {
+        if (getCurrentPlayer().isInPenaltyBox()) {
+            if (roll % 2 != 0) {
+                Player.isGettingOutOfPenaltyBox = true;
+                System.out.println(getCurrentPlayer() + " is getting out of the penalty box");
+                return true;
+            } else {
+                System.out.println(getCurrentPlayer() + " is not getting out of the penalty box");
+                Player.isGettingOutOfPenaltyBox = false;
+                return false;
+            }
+        }
+        return true;
     }
 
     void askQuestion(int place) {
@@ -120,8 +132,8 @@ public class Game {
     }
 
     public boolean wasCorrectlyAnswered() {
-        if (inPenaltyBox[currentPlayer]) {
-            if (isGettingOutOfPenaltyBox) {
+        if (getCurrentPlayer().isInPenaltyBox()) {
+            if (Player.isGettingOutOfPenaltyBox) {
                 return scoreCurrentPlayer();
             } else {
                 currentPlayer++;
@@ -151,7 +163,7 @@ public class Game {
     public boolean wrongAnswer() {
         System.out.println("Question was incorrectly answered");
         System.out.println(players.get(currentPlayer) + " was sent to the penalty box");
-        inPenaltyBox[currentPlayer] = true;
+        getCurrentPlayer().setInPenaltyBox(true);
 
         currentPlayer++;
         if (currentPlayer == players.size()) currentPlayer = 0;
