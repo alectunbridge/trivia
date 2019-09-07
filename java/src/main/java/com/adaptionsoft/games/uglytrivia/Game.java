@@ -17,6 +17,21 @@ class Player {
         this.game = game;
     }
 
+    boolean tryToGetOutOfPenaltyBox(int roll) {
+        if (inPenaltyBox) {
+            if (roll % 2 != 0) {
+                isGettingOutOfPenaltyBox = true;
+                System.out.println(this + " is getting out of the penalty box");
+                return true;
+            } else {
+                System.out.println(this + " is not getting out of the penalty box");
+                isGettingOutOfPenaltyBox = false;
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
         return playerName;
@@ -103,24 +118,9 @@ public class Game {
         System.out.println(getCurrentPlayer() + " is the current player");
         System.out.println("They have rolled a " + roll);
 
-        if(tryToGetOutOfPenaltyBox(roll)) {
+        if(getCurrentPlayer().tryToGetOutOfPenaltyBox(roll)) {
             getCurrentPlayer().takeTurn(roll);
         }
-    }
-
-    private boolean tryToGetOutOfPenaltyBox(int roll) {
-        if (getCurrentPlayer().isInPenaltyBox()) {
-            if (roll % 2 != 0) {
-                Player.isGettingOutOfPenaltyBox = true;
-                System.out.println(getCurrentPlayer() + " is getting out of the penalty box");
-                return true;
-            } else {
-                System.out.println(getCurrentPlayer() + " is not getting out of the penalty box");
-                Player.isGettingOutOfPenaltyBox = false;
-                return false;
-            }
-        }
-        return true;
     }
 
     void askQuestion(int place) {
